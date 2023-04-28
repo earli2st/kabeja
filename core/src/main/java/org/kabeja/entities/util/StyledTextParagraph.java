@@ -39,7 +39,8 @@ public class StyledTextParagraph {
   private int lineIndex = 0;
   private boolean newline = false;
   private String fontFile = "";
-  private int alignment = 1;
+  private int valign = 1;
+  private String align = "";
   private Point3D insertPoint = new Point3D();
   private String color = null;
 
@@ -86,17 +87,31 @@ public class StyledTextParagraph {
   }
 
   /**
-   * @return Returns the alignment.
+   * @return Returns the vertical alignment.
    */
   public int getValign() {
-    return alignment;
+    return valign;
   }
 
   /**
-   * @param alignment The alignment to set.
+   * @param alignment The vertical alignment to set.
    */
   public void setValign(int alignment) {
-    this.alignment = alignment;
+    this.valign = alignment;
+  }
+
+  /**
+   * @return Returns the horizontal alignment.
+   */
+  public String getAlign() {
+    return align;
+  }
+
+  /**
+   * @param alignment The vertical alignment to set.
+   */
+  public void setAlign(String alignment) {
+    this.align = alignment;
   }
 
   /**

@@ -16,14 +16,17 @@
 
 package org.kabeja.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  */
 public class LineType {
   private String name = "";
-  private String descritpion = "";
+  private String description = "";
   private double totalPatternLength = 0.0;
-  private double[] pattern = new double[] {};
+  private List<LinePattern> pattern = new ArrayList<>();
 
   @SuppressWarnings("unused")
   private int elementCount = 0;
@@ -44,16 +47,16 @@ public class LineType {
 
   public LineType() {}
 
-  public String getDescritpion() {
-    return descritpion;
+  public String getDescription() {
+    return description;
   }
 
-  public void setDescritpion(String descritpion) {
-    this.descritpion = descritpion;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public int getSegmentCount() {
-    return pattern.length;
+    return pattern.size();
   }
 
   public void setSegmentCount(int elementCount) {
@@ -68,11 +71,11 @@ public class LineType {
     this.name = name;
   }
 
-  public double[] getPattern() {
+  public List<LinePattern> getPattern() {
     return pattern;
   }
 
-  public void setPattern(double[] pattern) {
+  public void setPattern(List<LinePattern> pattern) {
     this.pattern = pattern;
   }
 

@@ -16,9 +16,13 @@
 
 package org.kabeja.dxf.parser.table;
 
+import org.kabeja.common.LinePattern;
 import org.kabeja.common.LineType;
 import org.kabeja.dxf.parser.DXFValue;
 import org.kabeja.util.Constants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
@@ -31,10 +35,11 @@ public class DXFLineTypeTableHandler extends AbstractTableHandler {
   public static final int GROUPCODE_LTYPE_SEGMENT = 49;
   public static final int GROUPCODE_LTYPE_LENGTH = 40;
   public static final int GROUPCODE_LTYPE_SEGMENT_COUNT = 73;
+  public final static int GROUPCODE_LTYPE_SEGMENT_TYPE = 74;
   public static final int GROUPCODE_LTYPE_SCALE = 46;
   private LineType ltype;
   private int segmentCount = 0;
-  private double[] pattern;
+  private List<LinePattern> pattern;
 
   /*
    * (non-Javadoc)
@@ -72,21 +77,25 @@ public class DXFLineTypeTableHandler extends AbstractTableHandler {
         break;
 
       case GROUPCODE_LTYPE_DESCRIPTION:
-        ltype.setDescritpion(value.getValue());
+        ltype.setDescription(value.getValue());
         break;
 
       case GROUPCODE_LTYPE_SEGMENT_COUNT:
         int count = value.getIntegerValue();
-        pattern = new double[count];
+        pattern = new ArrayList<>(count);
         segmentCount = 0;
-
         break;
 
       case GROUPCODE_LTYPE_SEGMENT:
-        pattern[segmentCount] = value.getDoubleValue();
-        segmentCount++;
+        LinePattern e = getLinePattern(segmentCount);
+        e.setLength(value.getDoubleValue());
         break;
 
+      case GROUPCODE_LTYPE_SEGMENT_TYPE:
+        LinePattern e1 = getLinePattern(segmentCount);
+        e1.setType(value.getIntegerValue());
+        segmentCount++;
+        
       case GROUPCODE_LTYPE_LENGTH:
         ltype.setPatternLength(value.getDoubleValue());
         break;
@@ -94,6 +103,7 @@ public class DXFLineTypeTableHandler extends AbstractTableHandler {
       case GROUPCODE_LTYPE_ALIGNMENT:
         ltype.setAlignment(value.getIntegerValue());
         break;
+
       case GROUPCODE_LTYPE_SCALE:
         ltype.setScale(value.getDoubleValue());
         break;
@@ -105,6 +115,17 @@ public class DXFLineTypeTableHandler extends AbstractTableHandler {
       default:
         break;
     }
+  }
+
+  private LinePattern getLinePattern(int index) {
+    LinePattern element;
+    try {
+      element = pattern.get(index);
+    } catch (IndexOutOfBoundsException e) {
+      element = new LinePattern();
+      pattern.add(index, element);
+    }
+    return element;
   }
 
   /*

@@ -324,7 +324,7 @@ public class Layer {
 
   public void setXDataString(String xDataString) {
     if (!xDataList.isEmpty()) {
-      xDataList.get(xDataList.size() - 1).setxDataString(xDataString);
+      xDataList.get(xDataList.size() - 1).setXDataString(xDataString);
     }
   }
 

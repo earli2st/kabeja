@@ -336,13 +336,13 @@ public class Text extends Entity {
   }
 
   /**
-   * @param alignmentPointSet The alignmentPointSet to set.
+   * @param alignmentPoint The alignmentPointSet to set.
    */
   public void setAlignmentPoint(boolean alignmentPoint) {
     this.setBit(BOOLEAN_BIT_ALIGNMENTPOINTSET, alignmentPoint);
   }
 
-  public void setAligmnentPoint(Point3D alignmentPoint) {
+  public void setAlignmentPoint(Point3D alignmentPoint) {
     this.alignmentPoint = alignmentPoint;
   }
 
@@ -445,7 +445,7 @@ public class Text extends Entity {
 
     this.setInsertPoint(context.transform(this.getInsertPoint()));
     if (this.isAlignmentPointSet()) {
-      this.setAligmnentPoint(context.transform(this.getAlignmentPoint()));
+      this.setAlignmentPoint(context.transform(this.getAlignmentPoint()));
     }
   }
 

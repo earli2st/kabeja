@@ -32,7 +32,7 @@ public class DXFGenerator implements Generator {
 
   public static final String DXF_SUFFIX = "dxf";
 
-  public static final String DEFAUL_CONTEXT = "/profiles.xml";
+  public static final String DEFAULT_CONTEXT = "/profiles.xml";
 
   protected DXFGeneratorManager manager;
 

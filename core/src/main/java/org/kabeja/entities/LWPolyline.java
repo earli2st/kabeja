@@ -53,7 +53,7 @@ public class LWPolyline extends Entity {
     }
   }
 
-  public double getContstantWidth() {
+  public double getConstantWidth() {
     if (this.lazyContainer.contains(LAZY_INDEX_CONSTANTWIDTH)) {
       return ((Double) this.lazyContainer.get(LAZY_INDEX_CONSTANTWIDTH));
     }
@@ -108,7 +108,7 @@ public class LWPolyline extends Entity {
   }
 
   public void removeVertex(LW2DVertex vertex) {
-    // remove and check the constantwidth
+    // remove and check the constant width
     this.setBit(BOOLEAN_BIT_CONSTANTWIDTH, true);
     for (Iterator<LW2DVertex> i = this.vertices.iterator(); i.hasNext(); ) {
       LW2DVertex v = i.next();

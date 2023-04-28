@@ -40,9 +40,11 @@ public class DXFMTextHandler extends AbstractEntityHandler {
   public static final int TEXT_STYLE = 7;
   public static final int TEXT_OBLIQUEANGLE = 51;
   public static final int TEXT_ROTATION = 50;
+  public static final int TEXT_EMBEDDED_OBJECT = 101;
   private MText mtext;
   private StringBuffer buf = new StringBuffer();
   private int insert = 0;
+  private boolean skipEmbeddedObject = false;
 
   /** */
   public DXFMTextHandler() {
@@ -73,6 +75,9 @@ public class DXFMTextHandler extends AbstractEntityHandler {
 
   @Override
   public void parseGroup(int groupCode, DXFValue value) {
+    if (skipEmbeddedObject) {
+      return;
+    }
     switch (groupCode) {
       case TEXT_VALUE:
         String part = value.getValue();
@@ -167,6 +172,12 @@ public class DXFMTextHandler extends AbstractEntityHandler {
       case TEXT_OBLIQUEANGLE:
         mtext.setObliqueAngle(value.getDoubleValue());
         break;
+      
+      case TEXT_EMBEDDED_OBJECT:
+        // Embedded object which is started by group 101.
+        // All the rest data until end of entity should not be interpreted as entity attributes.
+        skipEmbeddedObject = true;
+        break;
 
       default:
         super.parseCommonProperty(groupCode, value, mtext);
@@ -179,5 +190,6 @@ public class DXFMTextHandler extends AbstractEntityHandler {
     mtext = new MText();
     mtext.setDocument(doc);
     insert = 0;
+    skipEmbeddedObject = false;
   }
 }

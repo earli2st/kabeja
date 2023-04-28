@@ -86,7 +86,7 @@ public class FixedStrokeWidthFilter extends AbstractSAXFilter {
               "",
               SVGConstants.SVG_ATTRIBUTE_TRANSFORM,
               SVGConstants.SVG_ATTRIBUTE_TRANSFORM,
-              SVGUtils.DEFAUL_ATTRIBUTE_TYPE,
+              SVGUtils.DEFAULT_ATTRIBUTE_TYPE,
               scaleValue);
         }
 

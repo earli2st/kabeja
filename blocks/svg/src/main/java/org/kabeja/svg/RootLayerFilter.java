@@ -75,7 +75,7 @@ public class RootLayerFilter extends AbstractSAXFilter {
                   "",
                   SVGConstants.SVG_ATTRIBUTE_TRANSFORM,
                   SVGConstants.SVG_ATTRIBUTE_TRANSFORM,
-                  SVGUtils.DEFAUL_ATTRIBUTE_TYPE,
+                  SVGUtils.DEFAULT_ATTRIBUTE_TYPE,
                   this.transformValue
                       + " "
                       + attributes.getValue(SVGConstants.SVG_ATTRIBUTE_TRANSFORM));
@@ -84,7 +84,7 @@ public class RootLayerFilter extends AbstractSAXFilter {
                   "",
                   SVGConstants.SVG_ATTRIBUTE_TRANSFORM,
                   SVGConstants.SVG_ATTRIBUTE_TRANSFORM,
-                  SVGUtils.DEFAUL_ATTRIBUTE_TYPE,
+                  SVGUtils.DEFAULT_ATTRIBUTE_TYPE,
                   this.transformValue);
             }
 
@@ -93,7 +93,7 @@ public class RootLayerFilter extends AbstractSAXFilter {
                   "",
                   SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH,
                   SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH,
-                  SVGUtils.DEFAUL_ATTRIBUTE_TYPE,
+                  SVGUtils.DEFAULT_ATTRIBUTE_TYPE,
                   this.strokeWidth);
             }
 

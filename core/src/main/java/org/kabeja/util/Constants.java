@@ -394,4 +394,7 @@ public class Constants {
 
   public static final Type<?>[] TYPES_ARC =
       new Type[] {Type.TYPE_ENTITY, Type.TYPE_CIRCLE, Type.TYPE_ARC};
+
+  public static final int GROUPCODE_XDATA_START = 1000;
+  public static final int GROUPCODE_XDATA_END = 1071;
 }

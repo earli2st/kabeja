@@ -393,7 +393,13 @@ public abstract class Entity implements DraftEntity {
 
   public void setXDataString(String xDataString) {
     if (!xDataList.isEmpty()) {
-      xDataList.get(xDataList.size() - 1).setxDataString(xDataString);
+      xDataList.get(xDataList.size() - 1).setXDataString(xDataString);
+    }
+  }
+
+  public void addXDataElement(int groupCode, String value) {
+    if (!xDataList.isEmpty()) {
+      xDataList.get(xDataList.size() - 1).addXDataElement(groupCode, value);
     }
   }
 

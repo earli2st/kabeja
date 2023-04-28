@@ -16,6 +16,7 @@
 package org.kabeja.dxf.generator.table;
 
 import org.kabeja.DraftDocument;
+import org.kabeja.common.LinePattern;
 import org.kabeja.common.LineType;
 import org.kabeja.dxf.generator.DXFGenerationConstants;
 import org.kabeja.dxf.generator.DXFGenerationContext;
@@ -27,6 +28,8 @@ import org.kabeja.dxf.generator.conf.DXFType;
 import org.kabeja.entities.util.Utils;
 import org.kabeja.io.GenerationException;
 import org.kabeja.util.Constants;
+
+import java.util.List;
 
 public class DXFLineTypeTableGenerator implements DXFTableGenerator {
 
@@ -75,7 +78,7 @@ public class DXFLineTypeTableGenerator implements DXFTableGenerator {
         out.output(2, ltype.getName());
         break;
       case 3:
-        out.output(3, ltype.getDescritpion());
+        out.output(3, ltype.getDescription());
         break;
       case 40:
         out.output(40, ltype.getPatternLength());
@@ -97,9 +100,9 @@ public class DXFLineTypeTableGenerator implements DXFTableGenerator {
         break;
 
       case DXFGenerationConstants.DXF_CHILDREN_INSERT_MARK:
-        double[] pattern = ltype.getPattern();
-        for (int p = 0; p < pattern.length; p++) {
-          out.output(49, pattern[p]);
+        List<LinePattern> pattern = ltype.getPattern();
+        for (LinePattern e : pattern) {
+          out.output(49, e.getLength());
         }
         break;
     }

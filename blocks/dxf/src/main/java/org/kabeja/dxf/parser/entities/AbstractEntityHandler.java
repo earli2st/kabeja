@@ -22,6 +22,7 @@ import org.kabeja.common.LineType;
 import org.kabeja.dxf.parser.DXFValue;
 import org.kabeja.entities.Entity;
 import org.kabeja.entities.util.Utils;
+import org.kabeja.util.Constants;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth </a>
@@ -37,7 +38,7 @@ public abstract class AbstractEntityHandler implements DXFEntityHandler {
   public static final int LAYER_NAME = 8;
   public static final int TRANSPARENCY = 440;
   public static final int COLOR_CODE = 62;
-  public static final int COLORNAME = 430;
+  public static final int COLOR_NAME = 430;
   public static final int COLOR_24BIT = 420;
   public static final int COLOR_TRANSPARENCY = 440;
   public static final int FLAGS = 70;
@@ -185,6 +186,13 @@ public abstract class AbstractEntityHandler implements DXFEntityHandler {
 
       case XDATA_APPLICATION_NAME:
         entity.addXData(value.getValue());
+        break;
+      
+      default:
+        // Add the data that corresponds to the extended data (XData).
+        if (groupCode > Constants.GROUPCODE_XDATA_START && groupCode <= Constants.GROUPCODE_XDATA_END) {
+          entity.addXDataElement(groupCode, value.getValue().trim());
+        }
         break;
     }
   }

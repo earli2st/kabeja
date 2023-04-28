@@ -23,6 +23,9 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.List;
+
+import org.kabeja.common.LinePattern;
 import org.kabeja.common.LineType;
 import org.kabeja.common.LineWidth;
 import org.kabeja.entities.util.StyledTextParagraph;
@@ -36,7 +39,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  */
 public class SVGUtils {
-  public static final String DEFAUL_ATTRIBUTE_TYPE = "CDATA";
+  public static final String DEFAULT_ATTRIBUTE_TYPE = "CDATA";
   public static final String DEFAULT_ID_NAME_PREFIX = "ID";
   public static final char DEFAULT_CONVERT_MARKER_CHAR = '_';
   private static DecimalFormat format;
@@ -69,7 +72,7 @@ public class SVGUtils {
     if (index > -1) {
       attr.removeAttribute(index);
     }
-    attr.addAttribute("", name, name, DEFAUL_ATTRIBUTE_TYPE, value);
+    attr.addAttribute("", name, name, DEFAULT_ATTRIBUTE_TYPE, value);
   }
 
   public static void characters(ContentHandler handler, String text) throws SAXException {
@@ -87,29 +90,25 @@ public class SVGUtils {
     addStrokeDashArrayAttribute(attr, ltype, 1.0);
   }
 
-  public static void addStrokeDashArrayAttribute(
-      AttributesImpl attr, LineType ltype, double scale) {
+  public static void addStrokeDashArrayAttribute(AttributesImpl attr, LineType ltype, double scale) {
     if (ltype != null) {
-      double[] pattern = ltype.getPattern();
-
-      if (pattern.length > 0) {
-        StringBuffer buf = new StringBuffer();
-
-        for (int i = 0; i < pattern.length; i++) {
-          if (pattern[i] != 0.0) {
-            buf.append(format.format(Math.abs((pattern[i] * scale))));
-          } else {
-            // that means a dot
-            buf.append("0.05%");
-          }
-
-          buf.append(", ");
-        }
-
-        buf.deleteCharAt(buf.length() - 2);
-
-        SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_STROKE_DASHARRAY, buf.toString());
+      List<LinePattern> pattern = ltype.getPattern();
+      if (pattern.isEmpty()) {
+        return;
       }
+
+      StringBuffer buf = new StringBuffer();
+      for (LinePattern p : pattern) {
+        if (p.getLength() != 0.0) {
+          buf.append(format.format(Math.abs((p.getLength() * scale))));
+        } else {
+          // that means a dot
+          buf.append("0.05%");
+        }
+        buf.append(", ");
+      }
+      buf.deleteCharAt(buf.length() - 2);
+      SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_STROKE_DASHARRAY, buf.toString());
     }
   }
 
