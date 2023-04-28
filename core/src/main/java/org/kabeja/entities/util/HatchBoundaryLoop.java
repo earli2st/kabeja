@@ -50,7 +50,7 @@ public class HatchBoundaryLoop {
     if (getBoundaryPathTypeFlag() == 0) {
       log += "DEFAULT";
     } else {
-      for (var flag : BoundaryPathType.values()) {
+      for (BoundaryPathType flag : BoundaryPathType.values()) {
         if (flag.id != 0) {
           if (isBoundaryPathType(flag)) {
             log += flag.name() + " ";
