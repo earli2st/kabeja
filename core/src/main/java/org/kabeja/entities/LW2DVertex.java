@@ -72,7 +72,7 @@ public class LW2DVertex {
    */
   public double getStartWidth() {
     if (extendedData != null) {
-      extendedData.getStartWidth();
+      return extendedData.getStartWidth();
     }
     return 0.0;
   }
