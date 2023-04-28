@@ -17,7 +17,6 @@
     * Under **Artifacts** select **+** > **JAR** > **From modules with dependencies...**
     * Select your desired module, e.g. **tfly-kabeja-dxf** and press **Ok**, **Ok**
 * Now you can build your **jar** by choosing **Build** > **Build Artifacts...** > **tfly-kabeja-dxf:jar** > **Build** 
-    
     * Your **jar** is now at `out` or `classes` > `/artifacts/tfly_kabeja_dxf_jar/tfly-kabeja-dxf.jar`
 
 ### How to debug
