@@ -35,7 +35,7 @@ public class DXFTextHandler extends AbstractEntityHandler {
   public static final int TEXT_ALIGN_Y = 21;
   public static final int TEXT_ALIGN_Z = 31;
   public static final int TEXT_STYLE = 7;
-  public static final int TEXT_OBLIQUEANGLE = 51;
+  public static final int TEXT_OBLIQUE_ANGLE = 51;
   public static final int TEXT_ROTATION = 50;
   protected Text text;
   protected String content;
@@ -166,7 +166,7 @@ public class DXFTextHandler extends AbstractEntityHandler {
 
         break;
 
-      case TEXT_OBLIQUEANGLE:
+      case TEXT_OBLIQUE_ANGLE:
         text.setObliqueAngle(value.getDoubleValue());
 
         break;

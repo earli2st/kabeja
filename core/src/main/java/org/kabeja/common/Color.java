@@ -283,7 +283,7 @@ public class Color {
 
   public static ColorTable KABEJA_DEFAULT_COLOR = new ColorTable(KABEJA_COLOR_TABLE);
 
-  public static void withColortable(ColorTable colorTable) {
+  public static void withColorTable(ColorTable colorTable) {
     KABEJA_DEFAULT_COLOR = colorTable;
   }
 

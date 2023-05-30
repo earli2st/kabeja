@@ -33,23 +33,15 @@ public class Text extends Entity {
   public static final double DEFAULT_FONT_SIZE = 8;
 
   public static final int VALIGN_BASELINE = 0;
-
   public static final int VALIGN_BOTTOM = 1;
-
-  public static final int VALIGN_CENTER = 2;
-
+  public static final int VALIGN_MIDDLE = 2;
   public static final int VALIGN_TOP = 3;
 
   public static final int ALIGN_LEFT = 0;
-
   public static final int ALIGN_CENTER = 1;
-
   public static final int ALIGN_RIGHT = 2;
-
   public static final int ALIGN_ALIGNED = 3;
-
   public static final int ALIGN_MIDDLE = 4;
-
   public static final int ALIGN_FIT = 5;
 
   protected double rotation = 0.0;
@@ -59,12 +51,6 @@ public class Text extends Entity {
   protected double scale_x = 1.0;
 
   protected double oblique_angle = 0.0;
-
-  protected double align_x = 0.0;
-
-  protected double align_y = 0.0;
-
-  protected double align_z = 0.0;
 
   // the horizontal align
   protected int align = 0;
@@ -80,10 +66,7 @@ public class Text extends Entity {
 
   protected Point3D alignmentPoint = new Point3D();
 
-  protected Point3D align_p2;
-
-  private static final int BOOLEAN_BIT_ALIGNMENTPOINTSET = 10;
-
+  private static final int BOOLEAN_BIT_ALIGNMENT_POINT = 10;
   //    private final static int BOOLEAN_BIT_BACKWARD=11;
   //    private final static int BOOLEAN_BIT_UPSIDEDOWN=12;
   //    private final static int BOOLEAN_BIT_TOP=13;
@@ -120,34 +103,34 @@ public class Text extends Entity {
 
       // we set the horizontal width
       switch (this.align) {
-        case 0:
+        case ALIGN_LEFT:
           bounds.addToBounds(p.getX() + w, p.getY(), p.getZ());
 
           break;
 
-        case 1:
+        case ALIGN_CENTER:
           bounds.addToBounds(p.getX() + (w / 2), p.getY(), p.getZ());
           bounds.addToBounds(p.getX() - (w / 2), p.getY(), p.getZ());
 
           break;
 
-        case 2:
+        case ALIGN_RIGHT:
           bounds.addToBounds(p.getX() - w, p.getY(), p.getZ());
 
           break;
 
-        case 3:
+        case ALIGN_ALIGNED:
           bounds.addToBounds(p.getX() - w, p.getY(), p.getZ());
 
           break;
 
-        case 4:
+        case ALIGN_MIDDLE:
           bounds.addToBounds(p.getX() + (w / 2), p.getY(), p.getZ());
           bounds.addToBounds(p.getX() - (w / 2), p.getY(), p.getZ());
 
           break;
 
-        case 5:
+        case ALIGN_FIT:
           bounds.addToBounds(p.getX() + (w / 2), p.getY(), p.getZ());
           bounds.addToBounds(p.getX() - (w / 2), p.getY(), p.getZ());
 
@@ -166,7 +149,7 @@ public class Text extends Entity {
 
           break;
 
-        case VALIGN_CENTER:
+        case VALIGN_MIDDLE:
           bounds.addToBounds(p.getX(), p.getY() + (h * 0.5), p.getZ());
           bounds.addToBounds(p.getX(), p.getY() - (h * 0.5), p.getZ());
 
@@ -332,14 +315,14 @@ public class Text extends Entity {
    * @return Returns the alignmentPointSet.
    */
   public boolean isAlignmentPointSet() {
-    return this.isBitEnabled(BOOLEAN_BIT_ALIGNMENTPOINTSET);
+    return this.isBitEnabled(BOOLEAN_BIT_ALIGNMENT_POINT);
   }
 
   /**
    * @param alignmentPoint The alignmentPointSet to set.
    */
   public void setAlignmentPoint(boolean alignmentPoint) {
-    this.setBit(BOOLEAN_BIT_ALIGNMENTPOINTSET, alignmentPoint);
+    this.setBit(BOOLEAN_BIT_ALIGNMENT_POINT, alignmentPoint);
   }
 
   public void setAlignmentPoint(Point3D alignmentPoint) {
@@ -367,35 +350,35 @@ public class Text extends Entity {
 
     if (!isUpsideDown()) {
       switch (align) {
-        case 1:
+        case ALIGN_CENTER:
           if (isAlignmentPointSet()) {
             aPoint.setX(alignmentPoint.getX());
           }
 
           break;
 
-        case 2:
+        case ALIGN_RIGHT:
           if (isAlignmentPointSet()) {
             aPoint.setX(alignmentPoint.getX());
           }
 
           break;
 
-        case 3:
+        case ALIGN_ALIGNED:
           if (isAlignmentPointSet()) {
             aPoint.setX(alignmentPoint.getX());
           }
 
           break;
 
-        case 4:
+        case ALIGN_MIDDLE:
           if (isAlignmentPointSet()) {
             aPoint.setX(alignmentPoint.getX());
           }
 
           break;
 
-        case 5:
+        case ALIGN_FIT:
           if (isAlignmentPointSet()) {
             aPoint.setX(alignmentPoint.getX());
           }
