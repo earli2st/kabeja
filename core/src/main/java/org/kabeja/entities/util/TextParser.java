@@ -89,7 +89,7 @@ public class TextParser {
     boolean formatting = false;
     boolean keyfollow = false;
     boolean complete = true;
-	boolean alignment = false;
+    boolean alignment = false;
     StyledTextParagraph StyledAlign = null;
     Stack<StyledTextParagraph> paras = new Stack<>();
     int linecount = 0;
@@ -332,23 +332,24 @@ public class TextParser {
           break;
 
         case 'p': // horizontal alignment
-            // For \pxq* or \pq* paragraph formatting.
-            // "horizontal alignment" property is either "r", "c", "l", "j", "d" for right, center, left, justify, distribute alignment.
-            if (formatting) {
-              if (keyfollow) {
-                // e.g. \pxqr, \pqr
-                key = c;
-                keyfollow = false;
-                alignment = true;
-              } else {
-                // e.g. \fArial Unicode MS|b0|i0|c0|p0;
-                value.append(c);
-              }
+          // For \pxq* or \pq* paragraph formatting.
+          // "horizontal alignment" property is either "r", "c", "l", "j", "d"
+          //    for right, center, left, justify, distribute alignment.
+          if (formatting) {
+            if (keyfollow) {
+              // e.g. \pxqr, \pqr
+              key = c;
+              keyfollow = false;
+              alignment = true;
             } else {
-              buf.append(c);
+              // e.g. \fArial Unicode MS|b0|i0|c0|p0;
+              value.append(c);
             }
+          } else {
+            buf.append(c);
+          }
 
-            break;
+          break;
 
         default:
           if (formatting) {
@@ -391,7 +392,8 @@ public class TextParser {
     return p;
   }
 
-  private static StyledTextParagraph createParagraphFromMText(MText text, StyledTextParagraph parent) {
+  private static StyledTextParagraph createParagraphFromMText(
+      MText text, StyledTextParagraph parent) {
     StyledTextParagraph p = new StyledTextParagraph();
     p.setFontHeight(text.getHeight());
     p.setInsertPoint(text.getInsertPoint());
@@ -529,7 +531,8 @@ public class TextParser {
     return doc;
   }
 
-  public static void parseStyledTextParagraphSettings(char key, String value, StyledTextParagraph para) {
+  public static void parseStyledTextParagraphSettings(
+      char key, String value, StyledTextParagraph para) {
     if (value.length() > 0) {
 
       switch (key) {
@@ -591,11 +594,12 @@ public class TextParser {
           break;
 
         case 'p':
-            // For \pxq* or \pq* paragraph formatting.
-            // "horizontal alignment" property is either "r", "c", "l", "j", "d" for right, center, left, justify, distribute alignment.
-            if (value.startsWith("xq") || value.startsWith("q")) {
-                para.setAlign(value.substring(value.length() - 1));
-            }
+          // For \pxq* or \pq* paragraph formatting.
+          // "horizontal alignment" property is either "r", "c", "l", "j", "d" for right, center,
+          // left, justify, distribute alignment.
+          if (value.startsWith("xq") || value.startsWith("q")) {
+            para.setAlign(value.substring(value.length() - 1));
+          }
           break;
       }
     }
