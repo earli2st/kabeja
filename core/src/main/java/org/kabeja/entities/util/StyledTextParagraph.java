@@ -22,10 +22,11 @@ import org.kabeja.math.Point3D;
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  */
 public class StyledTextParagraph {
-  public static final int VERTICAL_ALIGNMENT_TOP = 2;
-  public static final int VERTICAL_ALIGNMENT_BASELINE = 1;
+
   public static final int VERTICAL_ALIGNMENT_BOTTOM = 0;
-  public static final int VERTICAL_ALIGNMENT_CENTER = 4;
+  public static final int VERTICAL_ALIGNMENT_CENTER = 1;
+  public static final int VERTICAL_ALIGNMENT_TOP = 2;
+
   private boolean italic = false;
   private boolean bold = false;
   private boolean underline = false;
@@ -34,7 +35,7 @@ public class StyledTextParagraph {
   private String font = "";
   private StringBuffer text = new StringBuffer();
   private double width = 0.0;
-  private double obliquiAngle = 0.0;
+  private double obliqueAngle = 0.0;
   private double characterspace = 0.0;
   private int lineIndex = 0;
   private boolean newline = false;
@@ -171,17 +172,17 @@ public class StyledTextParagraph {
   }
 
   /**
-   * @return Returns the obliquiAngle.
+   * @return Returns the obliqueAngle.
    */
-  public double getObliquiAngle() {
-    return obliquiAngle;
+  public double getObliqueAngle() {
+    return obliqueAngle;
   }
 
   /**
-   * @param obliquiAngle The obliquiAngle to set.
+   * @param obliqueAngle The obliqueAngle to set.
    */
-  public void setObliquiAngle(double obliquiAngle) {
-    this.obliquiAngle = obliquiAngle;
+  public void setObliqueAngle(double obliqueAngle) {
+    this.obliqueAngle = obliqueAngle;
   }
 
   /**
@@ -242,17 +243,17 @@ public class StyledTextParagraph {
   }
 
   /**
-   * @return Returns the linecount.
+   * @return Returns the lineCount.
    */
   public int getLineIndex() {
     return lineIndex;
   }
 
   /**
-   * @param linecount The linecount to set.
+   * @param lineCount The lineCount to set.
    */
-  public void setLineIndex(int linecount) {
-    this.lineIndex = linecount;
+  public void setLineIndex(int lineCount) {
+    this.lineIndex = lineCount;
   }
 
   /**

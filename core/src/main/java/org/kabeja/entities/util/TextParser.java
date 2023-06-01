@@ -26,6 +26,7 @@ import org.kabeja.entities.Text;
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  */
 public class TextParser {
+
   public static TextDocument parseMText(MText text) {
     // initialize
     TextDocument doc = new TextDocument();
@@ -65,22 +66,22 @@ public class TextParser {
         break;
 
       case MText.ATTACHMENT_BOTTOM_LEFT:
-        p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_BASELINE);
+        p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_BOTTOM);
 
         break;
 
       case MText.ATTACHMENT_BOTTOM_CENTER:
-        p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_BASELINE);
+        p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_BOTTOM);
 
         break;
 
       case MText.ATTACHMENT_BOTTOM_RIGHT:
-        p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_BASELINE);
+        p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_BOTTOM);
 
         break;
 
       default:
-        p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_BASELINE);
+        p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_BOTTOM);
 
         break;
     }
@@ -88,6 +89,8 @@ public class TextParser {
     boolean formatting = false;
     boolean keyfollow = false;
     boolean complete = true;
+    boolean alignment = false;
+    StyledTextParagraph StyledAlign = null;
     Stack<StyledTextParagraph> paras = new Stack<>();
     int linecount = 0;
     int linePosition = 0;
@@ -104,12 +107,11 @@ public class TextParser {
       char c = str.charAt(i);
 
       switch (c) {
-        case '\\':
+        case '\\': // Escape character - e.g. \\ = "\", \{ = "{"
           if (formatting) {
             if (!complete) {
               parseStyledTextParagraphSettings(key, value.toString(), p);
               value.delete(0, value.length());
-              formatting = true;
               keyfollow = true;
             } else {
               buf.append(c);
@@ -123,7 +125,7 @@ public class TextParser {
 
           break;
 
-        case '~':
+        case '~': // Non-wrapping space, hard space
           if (formatting) {
             buf.append(c);
             formatting = false;
@@ -134,8 +136,22 @@ public class TextParser {
 
         case ';':
           if (formatting) {
+            if (StyledAlign != null) {
+              reflectLineAlignment(p, StyledAlign);
+            }
+            /* TODO Should I separate TextParagraphs for each font setting? (\fArial|b1|i0|c129|p34;)
+            if (buf.length() > 0) {
+              p.setText(buf.toString());
+              doc.addStyledParagraph(p);
+              buf.delete(0, buf.length());
+              p = createParagraphFromParent(p);
+            }*/
             parseStyledTextParagraphSettings(key, value.toString(), p);
             value.delete(0, value.length());
+            if (alignment) {
+              StyledAlign = createParagraphFromParent(p);
+              alignment = false;
+            }
             formatting = false;
             complete = true;
             keyfollow = false;
@@ -145,7 +161,7 @@ public class TextParser {
 
           break;
 
-        case '}':
+        case '}': // Braces - define the text area influenced by the code
           if (formatting && keyfollow) {
             buf.append(c);
             formatting = false;
@@ -154,24 +170,26 @@ public class TextParser {
             if (formatting) {
               value.append(c);
             } else {
+              if (StyledAlign != null) {
+                reflectLineAlignment(p, StyledAlign);
+              }
               // format change end
               if (buf.length() > 0) {
                 p.setText(buf.toString());
                 doc.addStyledParagraph(p);
                 buf.delete(0, buf.length());
               }
-
               if (paras.size() > 0) {
-                p = createParagraphFromParent((StyledTextParagraph) paras.pop());
+                p = createParagraphFromParent(paras.pop());
               } else {
-                p = createParagraphFromMText(text);
+                p = createParagraphFromMText(text, p);
               }
             }
           }
 
           break;
 
-        case '{':
+        case '{': // Braces - define the text area influenced by the code
           if (formatting && keyfollow) {
             buf.append(c);
             formatting = false;
@@ -180,6 +198,9 @@ public class TextParser {
             if (formatting) {
               value.append(c);
             } else {
+              if (StyledAlign != null) {
+                reflectLineAlignment(p, StyledAlign);
+              }
               // start format change
               if (linePosition != 0) {
                 p.setText(buf.toString());
@@ -188,14 +209,14 @@ public class TextParser {
                   buf.delete(0, buf.length());
                 }
                 paras.add(p);
-                p = createParagraphFromMText(text);
+                p = createParagraphFromMText(text, p);
               }
             }
           }
 
           break;
 
-        case 'O':
+        case 'O': // Start overstrike
           if (formatting && keyfollow) {
             if (buf.length() > 0) {
               p.setText(buf.toString());
@@ -216,7 +237,7 @@ public class TextParser {
 
           break;
 
-        case 'o':
+        case 'o': // Stop overstrike
           if (formatting && keyfollow) {
             if (buf.length() > 0) {
               p.setText(buf.toString());
@@ -237,28 +258,7 @@ public class TextParser {
 
           break;
 
-        case 'u':
-          if (formatting && keyfollow) {
-            if (buf.length() > 0) {
-              p.setText(buf.toString());
-              buf.delete(0, buf.length());
-              doc.addStyledParagraph(p);
-              p = createParagraphFromParent(p);
-            }
-            p.setUnderline(false);
-            formatting = false;
-            keyfollow = false;
-          } else {
-            if (formatting) {
-              value.append(c);
-            } else {
-              buf.append(c);
-            }
-          }
-
-          break;
-
-        case 'L':
+        case 'L': // Start underline
           if (formatting && keyfollow) {
             if (buf.length() > 0) {
               p.setText(buf.toString());
@@ -279,7 +279,7 @@ public class TextParser {
 
           break;
 
-        case 'l':
+        case 'l': // Stop underline
           if (formatting && keyfollow) {
             if (buf.length() > 0) {
               p.setText(buf.toString());
@@ -300,8 +300,11 @@ public class TextParser {
 
           break;
 
-        case 'P':
+        case 'P': // New paragraph (new line)
           if (formatting && keyfollow) {
+            if (StyledAlign != null) {
+              reflectLineAlignment(p, StyledAlign);
+            }
             // end the current paragraph and set its newline flag
             p.setText(buf.toString());
             buf.delete(0, buf.length());
@@ -312,16 +315,38 @@ public class TextParser {
             // start a new line
             p = createParagraphFromParent(p);
             p.setLineIndex(linecount);
+            p.setAlign("");
 
             formatting = false;
             keyfollow = false;
             linePosition = 0;
+            StyledAlign = null;
           } else {
             if (formatting) {
               value.append(c);
             } else {
               buf.append(c);
             }
+          }
+
+          break;
+
+        case 'p': // horizontal alignment
+          // For \pxq* or \pq* paragraph formatting.
+          // "horizontal alignment" property is either "r", "c", "l", "j", "d"
+          //    for right, center, left, justify, distribute alignment.
+          if (formatting) {
+            if (keyfollow) {
+              // e.g. \pxqr, \pqr
+              key = c;
+              keyfollow = false;
+              alignment = true;
+            } else {
+              // e.g. \fArial Unicode MS|b0|i0|c0|p0;
+              value.append(c);
+            }
+          } else {
+            buf.append(c);
           }
 
           break;
@@ -367,8 +392,20 @@ public class TextParser {
     return p;
   }
 
+  private static StyledTextParagraph createParagraphFromMText(
+      MText text, StyledTextParagraph parent) {
+    StyledTextParagraph p = new StyledTextParagraph();
+    p.setFontHeight(text.getHeight());
+    p.setInsertPoint(text.getInsertPoint());
+    p.setLineIndex(parent.getLineIndex());
+    p.setAlign(parent.getAlign());
+    return p;
+  }
+
   protected static StyledTextParagraph createParagraphFromParent(StyledTextParagraph parent) {
     StyledTextParagraph p = new StyledTextParagraph();
+    p.setLineIndex(parent.getLineIndex());
+    p.setAlign(parent.getAlign());
     p.setValign(parent.getValign());
     p.setBold(parent.isBold());
     p.setFont(parent.getFont());
@@ -379,14 +416,17 @@ public class TextParser {
     p.setFontHeight(parent.getFontHeight());
     p.setInsertPoint(parent.getInsertPoint());
     p.setColor(parent.getColor());
-
+    p.setCharacterspace(parent.getCharacterspace());
     return p;
+  }
+
+  protected static void reflectLineAlignment(StyledTextParagraph p, StyledTextParagraph from) {
+    p.setAlign(from.getAlign());
   }
 
   public static TextDocument parseText(Text text) {
     TextDocument doc = new TextDocument();
 
-    // boolean asciicontrol = false;
     StringBuffer buf = new StringBuffer();
 
     StyledTextParagraph p = new StyledTextParagraph();
@@ -399,17 +439,17 @@ public class TextParser {
           // described in the DXF specs
           p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_CENTER);
         } else {
-          p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_BASELINE);
+          p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_BOTTOM);
         }
 
         break;
 
       case Text.VALIGN_BOTTOM:
-        p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_BASELINE);
+        p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_BOTTOM);
 
         break;
 
-      case Text.VALIGN_CENTER:
+      case Text.VALIGN_MIDDLE:
         p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_CENTER);
 
         break;
@@ -420,7 +460,7 @@ public class TextParser {
         break;
     }
 
-    if ((text.getAlign() == 3) || (text.getAlign() == 5)) {
+    if ((text.getAlign() == Text.ALIGN_ALIGNED) || (text.getAlign() == Text.ALIGN_FIT)) {
       double length = Utils.distance(text.getInsertPoint(), text.getAlignmentPoint());
       p.setWidth(length);
     }
@@ -512,7 +552,7 @@ public class TextParser {
           break;
 
         case 'Q':
-          para.setObliquiAngle(Double.parseDouble(value));
+          para.setObliqueAngle(Double.parseDouble(value));
 
           break;
 
@@ -548,9 +588,18 @@ public class TextParser {
 
         case 'C':
           Integer colorCode = Integer.valueOf(value);
-          String rgbString = Color.getRGBString(colorCode);
-          para.setColor(rgbString);
+          String rgbHexString = Color.getRGBHexString(colorCode);
+          para.setColor(rgbHexString);
 
+          break;
+
+        case 'p':
+          // For \pxq* or \pq* paragraph formatting.
+          // "horizontal alignment" property is either "r", "c", "l", "j", "d" for right, center,
+          // left, justify, distribute alignment.
+          if (value.startsWith("xq") || value.startsWith("q")) {
+            para.setAlign(value.substring(value.length() - 1));
+          }
           break;
       }
     }
@@ -618,7 +667,7 @@ public class TextParser {
           if (c == 'I') {
             buf.append('\t');
           }
-          // filtering acsii controls here
+          // filtering ascii controls here
         }
 
         asciicontrol = false;

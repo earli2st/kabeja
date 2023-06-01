@@ -34,28 +34,29 @@ public class MText extends Text {
   public static final int ATTACHMENT_BOTTOM_LEFT = 7;
   public static final int ATTACHMENT_BOTTOM_CENTER = 8;
   public static final int ATTACHMENT_BOTTOM_RIGHT = 9;
-  private int attachmentpointLocation = 1;
-  private double refwidth = 0.0;
-  private double refheight = 0.0;
+
+  private int attachmentPointLocation = 1;
+  private double refWidth = 0.0;
+  private double refHeight = 0.0;
 
   public void setAttachmentPoint(int value) {
-    this.attachmentpointLocation = value;
+    this.attachmentPointLocation = value;
   }
 
   public void setReferenceWidth(double width) {
-    this.refwidth = width;
+    this.refWidth = width;
   }
 
   public double getReferenceWidth() {
-    return this.refwidth;
+    return this.refWidth;
   }
 
   public void setReferenceHeight(double height) {
-    this.refheight = height;
+    this.refHeight = height;
   }
 
   public double getReferenceHeight() {
-    return this.refheight;
+    return this.refHeight;
   }
 
   @Override
@@ -96,7 +97,7 @@ public class MText extends Text {
   }
 
   public int getAlignment() {
-    return attachmentpointLocation;
+    return attachmentPointLocation;
   }
 
   @Override
@@ -119,7 +120,7 @@ public class MText extends Text {
       double w = l * 0.7 * h;
       h *= this.textDoc.getLineCount();
 
-      switch (this.attachmentpointLocation) {
+      switch (this.attachmentPointLocation) {
         case ATTACHMENT_BOTTOM_CENTER:
           bounds.addToBounds(this.p.getX() + (w / 2), this.p.getY() + h, p.getZ());
           bounds.addToBounds(this.p.getX() - (w / 2), this.p.getY(), p.getZ());
